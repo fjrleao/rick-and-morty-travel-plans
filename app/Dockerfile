@@ -4,11 +4,11 @@ RUN apk update && apk add postgresql-client
 
 WORKDIR /app
 
-COPY ./app/shard.yml ./
+COPY ./shard.yml ./
 
 RUN shards install
 
-COPY ./app ./
+COPY ./ ./
 
 EXPOSE 3000
 
