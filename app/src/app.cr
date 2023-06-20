@@ -10,6 +10,18 @@ module App
     env.response.content_type = "application/json"
     TravelPlan.create(travel_stops: body.travel_stops).to_json
   end
+
+  get "/travel_plans" do |env|
+    env.response.content_type = "application/json"
+    TravelPlan.all.to_json
+  end
+
+  get "/travel_plans/:id" do |env|
+    id = env.params.url["id"]
+    env.response.content_type = "application/json"
+    env.response.status_code = 200
+    TravelPlan.find(id).to_json
+  end
 end
 
 Kemal.run
