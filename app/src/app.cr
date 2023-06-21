@@ -28,6 +28,14 @@ module App
     TravelPlan.delete(id)
     env.response.status_code = 204
   end
+
+  put "/travel_plans/:id" do |env|
+    id = env.params.url["id"]
+    body = TravelPlanSerializer.from_json env.request.body.not_nil!
+    TravelPlan.where { _id == id }.update(travel_stops: body.travel_stops)
+    env.response.content_type = "application/json"
+    TravelPlan.find(id).to_json
+  end
 end
 
 Kemal.run
