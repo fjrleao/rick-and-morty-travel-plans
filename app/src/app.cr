@@ -14,15 +14,17 @@ module App
   end
 
   get "/travel_plans" do |env|
+    query = env.params.query.to_h
     env.response.content_type = "application/json"
-    TravelPlansControllers.list.to_json
+    TravelPlansControllers.list(query).to_json
   end
 
   get "/travel_plans/:id" do |env|
     id = env.params.url["id"]
+    query = env.params.query.to_h
     env.response.content_type = "application/json"
     env.response.status_code = 200
-    TravelPlansControllers.retrieve(id).to_json
+    TravelPlansControllers.retrieve(id, query).to_json
   end
 
   delete "/travel_plans/:id" do |env|

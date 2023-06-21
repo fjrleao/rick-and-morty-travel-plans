@@ -6,12 +6,34 @@ class TravelPlansControllers
     TravelPlans::CreateTravelPlan.new(travel_stops).execute
   end
 
-  def self.list
-    TravelPlans::ListTravelPlan.new.execute
+  def self.list(query)
+    optimize = false
+    expand = false
+
+    if query.has_key?("optimize")
+      optimize = query["optimize"].to_bool
+    end
+
+    if query.has_key?("expand")
+      expand = query["expand"].to_bool
+    end
+
+    TravelPlans::ListTravelPlan.new.execute(expand, optimize)
   end
 
-  def self.retrieve(id)
-    TravelPlans::RetrieveTravelPlan.new(id.to_i).execute
+  def self.retrieve(id, query)
+    optimize = false
+    expand = false
+
+    if query.has_key?("optimize")
+      optimize = query["optimize"].to_bool
+    end
+
+    if query.has_key?("expand")
+      expand = query["expand"].to_bool
+    end
+
+    TravelPlans::RetrieveTravelPlan.new(id.to_i).execute(expand, optimize)
   end
 
   def self.delete(id)
