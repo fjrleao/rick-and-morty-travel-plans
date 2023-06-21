@@ -22,6 +22,12 @@ module App
     env.response.status_code = 200
     TravelPlan.find(id).to_json
   end
+
+  delete "/travel_plans/:id" do |env|
+    id = env.params.url["id"]
+    TravelPlan.delete(id)
+    env.response.status_code = 204
+  end
 end
 
 Kemal.run
