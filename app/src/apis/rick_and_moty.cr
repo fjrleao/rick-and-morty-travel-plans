@@ -12,18 +12,37 @@ class RickAndMortyApi
     private @api = Api::RickAndMorty.new
   end
 
-  def locationsById(filter : Array(Int32))
-    data, error, loading = @api.getApi.query("query locations($ids:[ID!]!){
+  def locationsById(filter : Array(Int32), expandResidents = false)
+    if expandResidents
+      query = "query locations($ids:[ID!]!){
+        locationsByIds(ids: $ids) {
+          id,
+          name,
+          type,
+          dimension ,
+          residents {
+            name
+            episode {
+              id
+              name
+            }
+          }
+        }
+      }"
+    else
+      query = "query locations($ids:[ID!]!){
         locationsByIds(ids: $ids) {
           id,
           name,
           type,
           dimension
         }
-      }
-    ", {:ids => filter})
+      }"
+    end
 
-    serialized_data = self.convertIdToInteger(data)
+    data, error, loading = @api.getApi.query(query, {:ids => filter})
+
+    data
   end
 
   def convertIdToInteger(data)
@@ -34,5 +53,10 @@ class RickAndMortyApi
     end
 
     serialized_data.locationsByIds
+  end
+
+  def optimizeTravel(filter : Array(Int32))
+    data = self.locationsById(filter)
+    puts data
   end
 end

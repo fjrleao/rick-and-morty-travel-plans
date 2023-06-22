@@ -12,9 +12,17 @@ module TravelPlans
       travel_plans_to_return = Hash(String, Array(Hash(String, Int32 | String) | Int32) | Array(Hash(String, Int32 | String)) | Int32).new
 
       plan = ListTravelPlanSerializable.from_json(travel_plans.to_json.to_s)
+
+      travel_stops = Array(Int32).from_json(plan.travel_stops.to_s)
+
+      if optimize
+        RickAndMortyApi.new.optimizeTravel(travel_stops)
+      end
+
       if expand
-        travel_stops = Array(Int32).from_json(plan.travel_stops.to_s)
-        travel_stops = RickAndMortyApi.new.locationsById(travel_stops)
+        rickAndMortyApi = RickAndMortyApi.new
+        travel_stops = rickAndMortyApi.locationsById(travel_stops)
+        travel_stops = rickAndMortyApi.convertIdToInteger(travel_stops)
       else
         travel_stops = plan.travel_stops
       end
