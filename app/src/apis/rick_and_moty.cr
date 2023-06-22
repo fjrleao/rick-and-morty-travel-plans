@@ -8,8 +8,12 @@ class RickAndMortyApiSerializable
 end
 
 class RickAndMortyApi
-  def self.locationsById(filter : Array(Int32))
-    data, error, loading = Api::RickAndMorty.new.getApi.query("query locations($ids:[ID!]!){
+  def initialize
+    private @api = Api::RickAndMorty.new
+  end
+
+  def locationsById(filter : Array(Int32))
+    data, error, loading = @api.getApi.query("query locations($ids:[ID!]!){
         locationsByIds(ids: $ids) {
           id,
           name,
@@ -19,6 +23,10 @@ class RickAndMortyApi
       }
     ", {:ids => filter})
 
+    serialized_data = self.convertIdToInteger(data)
+  end
+
+  def convertIdToInteger(data)
     serialized_data = RickAndMortyApiSerializable.from_json(data.to_json.to_s)
 
     serialized_data.locationsByIds.each do |location|

@@ -14,7 +14,7 @@ module TravelPlans
       plan = ListTravelPlanSerializable.from_json(travel_plans.to_json.to_s)
       if expand
         travel_stops = Array(Int32).from_json(plan.travel_stops.to_s)
-        travel_stops = RickAndMortyApi.locationsById(travel_stops)
+        travel_stops = RickAndMortyApi.new.locationsById(travel_stops)
       else
         travel_stops = plan.travel_stops
       end
