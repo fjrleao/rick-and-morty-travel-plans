@@ -39,11 +39,6 @@ module App
     env.response.content_type = "application/json"
     TravelPlansControllers.update(id, body.travel_stops).to_json
   end
-
-  get "/sort" do |env|
-    env.response.content_type = "application/json"
-    [{"id" => "2", "name" => "Joao"}, {"id" => "1", "name" => "Fábio"}].sort_by { |hsh| hsh["id"] }.to_json
-  end
 end
 
 Kemal.run
