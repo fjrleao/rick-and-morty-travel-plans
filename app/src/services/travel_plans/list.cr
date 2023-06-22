@@ -16,25 +16,72 @@ module TravelPlans
 
     def execute(expand, optimize)
       travel_plans = TravelPlan.all.to_a
-      travel_plans_to_return = [] of Hash(String, Array(Hash(String, Int32 | String) | Int32) | Array(Hash(String, Int32 | String)) | Int32)
 
       rickAndMortyApi = RickAndMortyApi.new
 
-      travel_plans.each do |plan|
-        plan = ListTravelPlanSerializable.from_json(plan.to_json.to_s)
-        if expand
+      if expand && optimize
+        travel_plans_to_return = [] of Hash(String, Array(Hash(String, Int32 | String)) | Int32)
+        travel_plans.each do |plan|
+          plan = ListTravelPlanSerializable.from_json(plan.to_json.to_s)
+          travel_stops_array = Array(Int32).from_json(plan.travel_stops.to_s)
+          travel_stops = rickAndMortyApi.locationsById(travel_stops_array)
+          travel_stops = rickAndMortyApi.convertIdToInteger(travel_stops)
+          optimized_array = rickAndMortyApi.optimizeTravel(travel_stops_array)
+          travel_stops = rickAndMortyApi.expandOptimized(optimized_array, travel_stops)
+          travel_plans_to_return.push({
+            "id"           => plan.id,
+            "travel_stops" => travel_stops,
+          })
+        end
+        return travel_plans_to_return
+      end
+
+      if optimize
+        travel_plans_to_return = [] of Hash(String, Array(Int32) | Int32)
+        travel_plans.each do |plan|
+          plan = ListTravelPlanSerializable.from_json(plan.to_json.to_s)
+          travel_stops = Array(Int32).from_json(plan.travel_stops.to_s)
+          travel_plans_to_return.push({
+            "id"           => plan.id,
+            "travel_stops" => rickAndMortyApi.optimizeTravel(travel_stops),
+          })
+        end
+        return travel_plans_to_return
+      end
+
+      if expand
+        travel_plans_to_return = [] of Hash(String, Array(Hash(String, Int32 | String)) | Int32)
+        travel_plans.each do |plan|
+          plan = ListTravelPlanSerializable.from_json(plan.to_json.to_s)
           travel_stops = Array(Int32).from_json(plan.travel_stops.to_s)
           travel_stops = rickAndMortyApi.locationsById(travel_stops)
           travel_stops = rickAndMortyApi.convertIdToInteger(travel_stops)
-        else
-          travel_stops = plan.travel_stops
+          travel_plans_to_return.push({
+            "id"           => plan.id,
+            "travel_stops" => travel_stops,
+          })
         end
-        travel_plans_to_return.push({
-          "id"           => plan.id,
-          "travel_stops" => travel_stops,
-        })
+        return travel_plans_to_return
       end
-      travel_plans_to_return
+
+      travel_plans
+
+      # travel_plans.each do |plan|
+      #   plan = ListTravelPlanSerializable.from_json(plan.to_json.to_s)
+
+      #   if expand
+      #     travel_stops = Array(Int32).from_json(plan.travel_stops.to_s)
+      #     travel_stops = rickAndMortyApi.locationsById(travel_stops)
+      #     travel_stops = rickAndMortyApi.convertIdToInteger(travel_stops)
+      #   else
+      #     travel_stops = plan.travel_stops
+      #   end
+      #   travel_plans_to_return.push({
+      #     "id"           => plan.id,
+      #     "travel_stops" => travel_stops,
+      #   })
+      # end
+      # travel_plans_to_return
     end
   end
 end

@@ -8,28 +8,45 @@ module TravelPlans
 
     def execute(expand, optimize)
       travel_plans = TravelPlan.find!(@id).to_h
+      rickAndMortyApi = RickAndMortyApi.new
 
       travel_plans_to_return = Hash(String, Array(Hash(String, Int32 | String) | Int32) | Array(Hash(String, Int32 | String)) | Int32).new
 
       plan = ListTravelPlanSerializable.from_json(travel_plans.to_json.to_s)
 
-      travel_stops = Array(Int32).from_json(plan.travel_stops.to_s)
+      travel_stops_array = Array(Int32).from_json(plan.travel_stops.to_s)
 
-      if optimize
-        RickAndMortyApi.new.optimizeTravel(travel_stops)
+      if expand && optimize
+        travel_stops = rickAndMortyApi.locationsById(travel_stops_array)
+        travel_stops = rickAndMortyApi.convertIdToInteger(travel_stops)
+        optimized_array = rickAndMortyApi.optimizeTravel(travel_stops_array)
+        travel_stops = rickAndMortyApi.expandOptimized(optimized_array, travel_stops)
+        return {
+          "id"           => plan.id,
+          "travel_stops" => travel_stops,
+        }
       end
 
       if expand
-        rickAndMortyApi = RickAndMortyApi.new
-        travel_stops = rickAndMortyApi.locationsById(travel_stops)
+        travel_stops = rickAndMortyApi.locationsById(travel_stops_array)
         travel_stops = rickAndMortyApi.convertIdToInteger(travel_stops)
-      else
-        travel_stops = plan.travel_stops
+        return {
+          "id"           => plan.id,
+          "travel_stops" => travel_stops,
+        }
       end
-      travel_plans_to_return["id"] = plan.id
-      travel_plans_to_return["travel_stops"] = travel_stops
 
-      travel_plans_to_return
+      if optimize
+        return {
+          "id"           => plan.id,
+          "travel_stops" => rickAndMortyApi.optimizeTravel(travel_stops_array),
+        }
+      end
+
+      return {
+        "id"           => plan.id,
+        "travel_stops" => travel_stops_array,
+      }
     end
   end
 end

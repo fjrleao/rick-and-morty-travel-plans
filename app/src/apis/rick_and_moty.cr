@@ -118,6 +118,21 @@ class RickAndMortyApi
     sorted_data.each do |data|
       result_array.push(data["location_id"].to_i)
     end
+
     result_array
+  end
+
+  def expandOptimized(optimized_array, expanded_data)
+    result_hash = Array(Hash(String, String | Int32)).new
+    # puts optimized_array
+    # puts expanded_data
+    optimized_array.each do |id|
+      expanded_data.each do |data|
+        if data["id"] == id
+          result_hash.push(data)
+        end
+      end
+    end
+    result_hash
   end
 end
