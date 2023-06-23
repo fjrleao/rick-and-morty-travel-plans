@@ -6,23 +6,24 @@ require "./config/config"
 module App
   VERSION = "0.1.0"
 
+  before_all do |env|
+    env.response.content_type = "application/json"
+  end
+
   post "/travel_plans" do |env|
     body = TravelPlanSerializer.from_json env.request.body.not_nil!
-    env.response.content_type = "application/json"
     env.response.status_code = 201
     TravelPlansControllers.create(body.travel_stops).to_json
   end
 
   get "/travel_plans" do |env|
     query = env.params.query.to_h
-    env.response.content_type = "application/json"
     TravelPlansControllers.list(query).to_json
   end
 
   get "/travel_plans/:id" do |env|
     id = env.params.url["id"]
     query = env.params.query.to_h
-    env.response.content_type = "application/json"
     env.response.status_code = 200
     TravelPlansControllers.retrieve(id, query).to_json
   end
@@ -36,7 +37,6 @@ module App
   put "/travel_plans/:id" do |env|
     id = env.params.url["id"]
     body = TravelPlanSerializer.from_json env.request.body.not_nil!
-    env.response.content_type = "application/json"
     TravelPlansControllers.update(id, body.travel_stops).to_json
   end
 end
