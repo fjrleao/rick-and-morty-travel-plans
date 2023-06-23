@@ -5,7 +5,7 @@ describe RickAndMortyApi do
     it "Should be capable to get detailed data from Rick and Morty API" do
       rickAndMortyApi = RickAndMortyApi.new
 
-      locations = rickAndMortyApi.locationsById([1])
+      locations = rickAndMortyApi.locations_by_id([1])
 
       locations["locationsByIds"][0]["id"].should eq "1"
     end
@@ -13,7 +13,7 @@ describe RickAndMortyApi do
     it "Should be capable to convert id from string to integer" do
       rickAndMortyApi = RickAndMortyApi.new
 
-      locations = rickAndMortyApi.convertIdToInteger({
+      locations = rickAndMortyApi.convert_id_to_integer({
         "locationsByIds" => [
           {
             "id" => "1",
@@ -31,7 +31,7 @@ describe RickAndMortyApi do
     it "Should be capable to optimize travel" do
       rickAndMortyApi = RickAndMortyApi.new
 
-      optimized_travel = rickAndMortyApi.optimizeTravel([1, 2])
+      optimized_travel = rickAndMortyApi.optimize_travel([1, 2])
 
       optimized_travel.should eq [2, 1]
     end
@@ -50,7 +50,7 @@ describe RickAndMortyApi do
           "name" => "Planeta",
         },
       ]
-      optimized_expanded = rickAndMortyApi.expandOptimized(optimized_array, expanded_data)
+      optimized_expanded = rickAndMortyApi.expand_optimized(optimized_array, expanded_data)
 
       optimized_expanded[0]["id"].should eq 2
       optimized_expanded[1]["id"].should eq 1

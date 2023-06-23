@@ -11,7 +11,6 @@ class RickAndMortyExpandedApiSerializable
   include JSON::Serializable
 
   property locationsByIds : Array(Hash(String, String | Array(Hash(String, String | Array(Hash(String, String))))))
-  # property locationsByIds : Array(Hash(String, String | Array(Hash(String, String))))
 end
 
 class RickAndMortyApi
@@ -19,8 +18,8 @@ class RickAndMortyApi
     private @api = Api::RickAndMorty.new
   end
 
-  def locationsById(filter : Array(Int32), expandResidents = false)
-    if expandResidents
+  def locations_by_id(filter : Array(Int32), expand_residents = false)
+    if expand_residents
       query = "query locations($ids:[ID!]!){
         locationsByIds(ids: $ids) {
           id,
@@ -51,7 +50,7 @@ class RickAndMortyApi
     data
   end
 
-  def convertIdToInteger(data)
+  def convert_id_to_integer(data)
     serialized_data = RickAndMortyApiSerializable.from_json(data.to_json.to_s)
 
     serialized_data.locationsByIds.each do |location|
@@ -61,8 +60,8 @@ class RickAndMortyApi
     serialized_data.locationsByIds
   end
 
-  def optimizeTravel(filter : Array(Int32))
-    data = self.locationsById(filter, true)
+  def optimize_travel(filter : Array(Int32))
+    data = self.locations_by_id(filter, true)
 
     calculated_data = Array(Hash(String, String | Int32)).new
     dimension_data = Hash(String, Hash(String, Int32)).new
@@ -122,7 +121,7 @@ class RickAndMortyApi
     result_array
   end
 
-  def expandOptimized(optimized_array, expanded_data)
+  def expand_optimized(optimized_array, expanded_data)
     result_hash = Array(Hash(String, String | Int32)).new
     # puts optimized_array
     # puts expanded_data
