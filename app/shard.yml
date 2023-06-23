@@ -26,6 +26,10 @@ dependencies:
   dotenv:
     github: drum445/dotenv
 
+  spec-kemal:
+    github: kemalcr/spec-kemal
+    branch: master
+
 targets:
   app:
     main: src/app.cr
