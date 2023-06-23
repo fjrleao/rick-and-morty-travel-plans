@@ -31,9 +31,9 @@ describe RickAndMortyApi do
     it "Should be capable to optimize travel" do
       rickAndMortyApi = RickAndMortyApi.new
 
-      optimizedTravel = rickAndMortyApi.optimizeTravel([1, 2])
+      optimized_travel = rickAndMortyApi.optimizeTravel([1, 2])
 
-      optimizedTravel.should eq [2, 1]
+      optimized_travel.should eq [2, 1]
     end
 
     it "Should be capable to expand a optimized travel" do
@@ -50,7 +50,10 @@ describe RickAndMortyApi do
           "name" => "Planeta",
         },
       ]
-      optimizedExpanded = rickAndMortyApi.expandOptimized(optimized_array, expanded_data)
+      optimized_expanded = rickAndMortyApi.expandOptimized(optimized_array, expanded_data)
+
+      optimized_expanded[0]["id"].should eq 2
+      optimized_expanded[1]["id"].should eq 1
     end
   end
 end
