@@ -39,6 +39,12 @@ module App
     body = TravelPlanSerializer.from_json env.request.body.not_nil!
     TravelPlansControllers.update(id, body.travel_stops).to_json
   end
+
+  patch "/travel_plans/:id/append" do |env|
+    id = env.params.url["id"]
+    body = TravelPlanSerializer.from_json env.request.body.not_nil!
+    TravelPlansControllers.append(id, body.travel_stops).to_json
+  end
 end
 
 Kemal.run

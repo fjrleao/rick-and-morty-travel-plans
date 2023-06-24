@@ -43,4 +43,8 @@ class TravelPlansControllers
   def self.update(id, travel_stops)
     TravelPlans::UpdateTravelPlan.new(id.to_i, travel_stops).execute
   end
+
+  def self.append(id, travel_stops)
+    TravelPlans::AppendTravelStop.new(id.to_i, travel_stops).execute
+  end
 end
