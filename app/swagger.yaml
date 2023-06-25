@@ -27,8 +27,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TravelPlansResponse'
-        # '405':
-        #   description: Invalid input
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              example:
+                {
+                    "message": "Missing JSON attribute: travel_stops"
+                }
     get:
       tags:
         - travel_plans
@@ -62,8 +68,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TravelPlansResponse'
-  #       '400':
-  #         description: Invalid status value
   /travel_plans/{id}:
     get:
       tags:
@@ -98,11 +102,19 @@ paths:
               - false
       responses:
         '200':
-          description: successful operation
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TravelPlansResponse'
+        '404':
+          description: travel_plan id not found
+          content:
+            application/json:
+              example:
+                {
+                    "message": "Travel plan not found"
+                }
 
     put:
       tags:
@@ -135,12 +147,22 @@ paths:
               example:
                 id: 1
                 travel_stops: [3,4]
-        # '400':
-        #   description: Invalid ID supplied
-        # '404':
-        #   description: Pet not found
-        # '405':
-        #   description: Validation exception
+        '404':
+          description: travel_plan id not found
+          content:
+            application/json:
+              example:
+                {
+                    "message": "Travel plan not found"
+                }
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              example:
+                {
+                    "message": "Missing JSON attribute: travel_stops"
+                }
     delete:
       tags:
         - travel_plans
@@ -188,6 +210,22 @@ paths:
                 $ref: '#/components/schemas/TravelPlansResponse'
               example:
                 travel_stops: [1,2,3,4]
+        '404':
+          description: travel_plan id not found
+          content:
+            application/json:
+              example:
+                {
+                    "message": "Travel plan not found"
+                }
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              example:
+                {
+                    "message": "Missing JSON attribute: travel_stops"
+                }
 components:
   schemas:
     TravelPlansRequest:
