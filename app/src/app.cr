@@ -26,15 +26,15 @@ module App
   end
 
   get "/travel_plans/:id" do |env|
-    # begin
-    id = env.params.url["id"]
-    query = env.params.query.to_h
-    env.response.status_code = 200
-    TravelPlansControllers.retrieve(id, query).to_json
-    # rescue exception
-    #   puts exception
-    #   halt env, status_code = 404, %({"message": "Travel plan not found"})
-    # end
+    begin
+      id = env.params.url["id"]
+      query = env.params.query.to_h
+      env.response.status_code = 200
+      TravelPlansControllers.retrieve(id, query).to_json
+    rescue exception
+      puts exception
+      halt env, status_code = 404, %({"message": "Travel plan not found"})
+    end
   end
 
   delete "/travel_plans/:id" do |env|
