@@ -108,7 +108,7 @@ class RickAndMortyApi
 
     sorted_data = sorted_data.sort do |a, b|
       if a["location_popularity"].to_i == b["location_popularity"].to_i
-        a["name"].to_s <=> b["name"].to_s
+        a["location_name"].to_s <=> b["location_name"].to_s
       else
         a["dimension_popularity"].to_i <=> b["dimension_popularity"].to_i
       end
