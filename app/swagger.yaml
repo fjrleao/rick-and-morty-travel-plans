@@ -1,0 +1,214 @@
+openapi: 3.0.3
+info:
+  title: Rick e Morty Travel Plans - API Docs
+  description: |-
+    API Rest para controle de viagens interdimensionais dentro dos planetas do universo de Rick e Morty.
+  version: 1.0.0
+tags:
+  - name: travel_plans
+    description: Rotas do plano de viagem
+paths:
+  /travel_plans:
+    post:
+      tags:
+        - travel_plans
+      summary: Cria um novo plano de viagem
+      description: Criação de um novo plano de viagem, passando no body um vetor com o id dos planetas em que a viagem irá passar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelPlansRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelPlansResponse'
+        # '405':
+        #   description: Invalid input
+    get:
+      tags:
+        - travel_plans
+      summary: Busca por todos os planos de viagem
+      description: Os parâmetros de query podem ser usados em conjunto ou de maneira separada. Quando usados em conjunto, o resultado será o travel_stops otimizado e expandido.
+      parameters:
+        - name: expand
+          in: query
+          description: Quando true, o retorno do vetor de travel_stops é expandido para um objeto com detalhes de cada planeta.
+          required: false
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: optimize
+          in: query
+          description: Quando true, o retorno do vetor de travel_stops é reordenado de forma que a viagem fique otimizada entre os planetas. A otimização da viagem é feita de acordo com a popularidade das dimensões e dos planetas de cada dimensão.
+          required: false
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TravelPlansResponse'
+  #       '400':
+  #         description: Invalid status value
+  /travel_plans/{id}:
+    get:
+      tags:
+        - travel_plans
+      summary: Busca por um plano de viagem através do id
+      description: Os parâmetros de query podem ser usados em conjunto ou de maneira separada. Quando usados em conjunto, o resultado será o travel_stops otimizado e expandido.
+      parameters:
+        - name: id
+          in: path
+          description: id do travel_plan que será buscado
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: expand
+          in: query
+          description: Quando true, o retorno do vetor de travel_stops é expandido para um objeto com detalhes de cada planeta.
+          required: false
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: optimize
+          in: query
+          description: Quando true, o retorno do vetor de travel_stops é reordenado de forma que a viagem fique otimizada entre os planetas. A otimização da viagem é feita de acordo com a popularidade das dimensões e dos planetas de cada dimensão.
+          required: false
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelPlansResponse'
+
+    put:
+      tags:
+        - travel_plans
+      summary: Mudar o array de paradas do plano de viagem
+      description: Muda o vetor de travel_stops de acordo com o id do travel_plan passado na url
+      parameters:
+        - name: id
+          in: path
+          description: id do travel_plan que será atualizado
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelPlansRequest'
+            example:
+              travel_stops: [3,4]
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelPlansResponse'
+              example:
+                id: 1
+                travel_stops: [3,4]
+        # '400':
+        #   description: Invalid ID supplied
+        # '404':
+        #   description: Pet not found
+        # '405':
+        #   description: Validation exception
+    delete:
+      tags:
+        - travel_plans
+      summary: Deleta um plano de viagem
+      description: Deleta o plano de viagem através do id passado como parâmetro na rota
+      parameters:
+        - name: id
+          in: path
+          description: id do travel_plan que será excluído
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Successful operation
+  /travel_plans/{id}/append:
+    patch:
+      tags:
+        - travel_plans
+      summary: Incluir o novas paradas para o plano de viagem
+      description: Inclui novas paradas ao vetor de travel_stops de acordo com o id do travel_plan passado na url. Caso seja passado um id de uma parada que já esteja cadastrado, ele não será repetido.
+      parameters:
+        - name: id
+          in: path
+          description: id do travel_plan que será atualizado
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelPlansRequest'
+            example:
+              travel_stops: [1,3,4]
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelPlansResponse'
+              example:
+                travel_stops: [1,2,3,4]
+components:
+  schemas:
+    TravelPlansRequest:
+      type: object
+      properties:
+        travel_stops:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TravelStops"
+          example: [1,2]
+    TravelPlansResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        travel_stops:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TravelStops"
+          example: [1,2]
+    TravelStops:
+      type: number

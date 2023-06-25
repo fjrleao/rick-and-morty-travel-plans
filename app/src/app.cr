@@ -45,6 +45,11 @@ module App
     body = TravelPlanSerializer.from_json env.request.body.not_nil!
     TravelPlansControllers.append(id, body.travel_stops).to_json
   end
+
+  get "/docs" do |env|
+    env.response.content_type = "text/html"
+    render "src/public/docs/index.ecr"
+  end
 end
 
 Kemal.run

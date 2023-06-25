@@ -1,27 +1,17 @@
-# app
+# Introdução
 
-TODO: Write a description here
+Esse projeto se trata de uma API Rest para controle de viagens interdimensionais dentro dos planetas do universo de Rick e Morty. Com isso, é possível cadastrar, listar, atualizar e excluir um plano de viagem. Para cada plano de viagem, é cadastrado uma lista de planetas em que a viagem irá passar. A API conta também com recursos para otimizar a rota dos planetas e expandir as informações dos planetas em que a viagem irá passar.
 
-## Installation
+## Instalação e execução
 
-TODO: Write installation instructions here
+Para executar o projeto, basta fazer o clone desse repositório e usar o docker-compose na execução. O docker vai subir tanto o container da aplicação quanto o container do banco de dados, vai criar um novo banco e executar as migrações necessárias.
 
-## Usage
+```
+docker-compose up
+```
 
-TODO: Write usage instructions here
+Com o container no ar, basta fazer chamadas HTTP à API através do endereço http://localhost:3000.
 
-## Development
+## Documentação
 
-TODO: Write development instructions here
-
-## Contributing
-
-1. Fork it (<https://github.com/your-github-user/app/fork>)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-
-## Contributors
-
-- [your-name-here](https://github.com/your-github-user) - creator and maintainer
+Para ver a documentação das rotas, acesse [/docs](http://localhost:3000/docs) quando o projeto estiver executando.
