@@ -68,6 +68,40 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TravelPlansResponse'
+              examples:
+                /travel_plans:
+                  value:
+                    - id: 1
+                      travel_stops: [1,2]
+                /travel_plans?expand=true:
+                  value:
+                    - id: 1
+                      travel_stops:
+                        - id: 1
+                          name: "Earth (C-137)"
+                          type: "Planet"
+                          dimension: "Dimension C-137"
+                        - id: 2
+                          name: "Abadango"
+                          type: "Cluster"
+                          dimension: "unknown"
+                /travel_plans?optimize=true:
+                  value:
+                    - id: 1
+                      travel_stops: [2,1]
+                /travel_plans?expand=true&optimize=true:
+                  value:
+                    - id: 1
+                      travel_stops:
+                        - id: 2
+                          name: "Abadango"
+                          type: "Cluster"
+                          dimension: "unknown"
+                        - id: 1
+                          name: "Earth (C-137)"
+                          type: "Planet"
+                          dimension: "Dimension C-137"
+                    
   /travel_plans/{id}:
     get:
       tags:
@@ -107,6 +141,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TravelPlansResponse'
+              examples:
+                /travel_plans/1:
+                  value:
+                    id: 1
+                    travel_stops: [1,2]
+                /travel_plans/1?expand=true:
+                  value:
+                    id: 1
+                    travel_stops:
+                      - id: 1
+                        name: "Earth (C-137)"
+                        type: "Planet"
+                        dimension: "Dimension C-137"
+                      - id: 2
+                        name: "Abadango"
+                        type: "Cluster"
+                        dimension: "unknown"
+                /travel_plans/1?optimize=true:
+                  value:
+                    id: 1
+                    travel_stops: [2,1]
+                /travel_plans/1?expand=true&optimize=true:
+                  value:
+                    id: 1
+                    travel_stops:
+                      - id: 2
+                        name: "Abadango"
+                        type: "Cluster"
+                        dimension: "unknown"
+                      - id: 1
+                        name: "Earth (C-137)"
+                        type: "Planet"
+                        dimension: "Dimension C-137"
         '404':
           description: travel_plan id not found
           content:
