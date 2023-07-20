@@ -17,9 +17,9 @@ docker-compose up
 
 Com o container no ar, basta fazer chamadas HTTP à API através do endereço http://localhost:3000.
 
-## Documentação
+<!-- ## Documentação
 
-Para visualizar a documentação das rotas da API, acesse [/docs](http://localhost:3000/docs) quando o projeto estiver executando, ou acesse a [documentação online](https://docs-milenio-challenge.vercel.app/).
+Para visualizar a documentação das rotas da API, acesse [/docs](http://localhost:3000/docs) quando o projeto estiver executando, ou acesse a [documentação online](https://docs-milenio-challenge.vercel.app/). -->
 
 ---
 
